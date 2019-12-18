@@ -1,0 +1,20 @@
+version: '3.4'
+services:
+  db-competition:
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: passw0rd
+      POSTGRES_DB: competitiondb
+    ports:
+      - 15430:5432
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  rabbit:
+    image: rabbitmq
+    restart: always
+    ports:
+    - 5672:5672
+    - 15672:15672

@@ -1,0 +1,25 @@
+logging:
+  level:
+    root: INFO
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:15430/competitiondb
+    username: postgres
+    password: passw0rd
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:liquibase/liquibase-changelog.xml
+    liquibase-schema: liquibase
+    enabled: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+rabbitmq:
+    queue: trial-word-result
+project:
+  version: '@project.version@'
