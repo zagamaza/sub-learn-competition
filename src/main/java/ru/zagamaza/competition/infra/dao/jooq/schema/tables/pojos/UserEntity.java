@@ -25,12 +25,14 @@ import ru.zagamaza.competition.infra.dao.entity.Entity;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserEntity implements Entity, Serializable {
 
-    private static final long serialVersionUID = -1858422022;
+    private static final long serialVersionUID = 1765434460;
 
-    private Integer        id;
+    private Long           id;
     private OffsetDateTime created;
     private Integer        experience;
-    private Integer        levelId;
+    private Long           levelId;
+    private Long           telegramId;
+    private String         userName;
 
     public UserEntity() {}
 
@@ -39,25 +41,31 @@ public class UserEntity implements Entity, Serializable {
         this.created = value.created;
         this.experience = value.experience;
         this.levelId = value.levelId;
+        this.telegramId = value.telegramId;
+        this.userName = value.userName;
     }
 
     public UserEntity(
-        Integer        id,
+        Long           id,
         OffsetDateTime created,
         Integer        experience,
-        Integer        levelId
+        Long           levelId,
+        Long           telegramId,
+        String         userName
     ) {
         this.id = id;
         this.created = created;
         this.experience = experience;
         this.levelId = levelId;
+        this.telegramId = telegramId;
+        this.userName = userName;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -77,12 +85,28 @@ public class UserEntity implements Entity, Serializable {
         this.experience = experience;
     }
 
-    public Integer getLevelId() {
+    public Long getLevelId() {
         return this.levelId;
     }
 
-    public void setLevelId(Integer levelId) {
+    public void setLevelId(Long levelId) {
         this.levelId = levelId;
+    }
+
+    public Long getTelegramId() {
+        return this.telegramId;
+    }
+
+    public void setTelegramId(Long telegramId) {
+        this.telegramId = telegramId;
+    }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Override
@@ -118,6 +142,18 @@ public class UserEntity implements Entity, Serializable {
         }
         else if (!levelId.equals(other.levelId))
             return false;
+        if (telegramId == null) {
+            if (other.telegramId != null)
+                return false;
+        }
+        else if (!telegramId.equals(other.telegramId))
+            return false;
+        if (userName == null) {
+            if (other.userName != null)
+                return false;
+        }
+        else if (!userName.equals(other.userName))
+            return false;
         return true;
     }
 
@@ -129,6 +165,8 @@ public class UserEntity implements Entity, Serializable {
         result = prime * result + ((this.created == null) ? 0 : this.created.hashCode());
         result = prime * result + ((this.experience == null) ? 0 : this.experience.hashCode());
         result = prime * result + ((this.levelId == null) ? 0 : this.levelId.hashCode());
+        result = prime * result + ((this.telegramId == null) ? 0 : this.telegramId.hashCode());
+        result = prime * result + ((this.userName == null) ? 0 : this.userName.hashCode());
         return result;
     }
 
@@ -140,6 +178,8 @@ public class UserEntity implements Entity, Serializable {
         sb.append(", ").append(created);
         sb.append(", ").append(experience);
         sb.append(", ").append(levelId);
+        sb.append(", ").append(telegramId);
+        sb.append(", ").append(userName);
 
         sb.append(")");
         return sb.toString();

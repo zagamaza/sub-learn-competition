@@ -9,6 +9,6 @@ import lombok.Setter;
 @EqualsAndHashCode
 public abstract class DomainModel {
 
-    private Integer id;
+    private Long id;
 
 }

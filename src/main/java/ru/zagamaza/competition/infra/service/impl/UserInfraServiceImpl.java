@@ -14,6 +14,7 @@ import ru.zagamaza.competition.infra.mapper.BaseMapper;
 import ru.zagamaza.competition.infra.service.LeagueLevelInfraService;
 import ru.zagamaza.competition.infra.service.UserInfraService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,24 +35,28 @@ public class UserInfraServiceImpl extends BaseResourceInfraServiceImpl<UserEntit
         this.leagueLevelInfraService = leagueLevelInfraService;
     }
 
-    public Page<UserModel> getByUserFriendUserId(Integer userId, Pageable pageable) {
+    public Page<UserModel> getByUserFriendUserId(Long userId, Pageable pageable) {
         List<UserModel> userModels = repository.getByUserFriendUserId(userId, pageable)
                                                .stream()
                                                .map(e -> getModelMapper().entityToModel(e))
                                                .collect(Collectors.toList());
         Integer count = repository.getCountByUserFriendUserId(userId);
+        if (count == null && !userModels.isEmpty()) {
+            count = 1;
+        } else if (count == null) {
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+        }
         return new PageImpl<>(userModels, pageable, count);
     }
 
     @Override
-    public void createOrUpdateExperience(Integer userId) {
-        if (!repository.checkExists(userId)) {
+    public void createOrUpdateExperience(UserModel userModel) {
+        if (!repository.checkExists(userModel.getId())) {
             LeagueLevelModel leagueLevelModel = leagueLevelInfraService.getByCode(Level.FIRST);
-            UserModel userModel = UserModel.builder().levelId(leagueLevelModel.getId()).build();
-            userModel.setId(userId);
+            userModel.setLevelId(leagueLevelModel.getId());
             create(userModel);
         } else {
-            UserModel userModel = get(userId);
+            userModel = get(userModel.getId());
             userModel.setExperience(userModel.getExperience() + 1);
             update(userModel);
         }
@@ -64,5 +69,18 @@ public class UserInfraServiceImpl extends BaseResourceInfraServiceImpl<UserEntit
                          .collect(Collectors.toList());
     }
 
+    @Override
+    public UserModel getByTelegramId(Long telegramId) {
+        UserEntity userEntity = repository.getByTelegramId(telegramId);
+        return getModelMapper().entityToModel(userEntity);
+    }
+
+    @Override
+    public UserModel get(Long id) {
+        UserModel userModel = super.get(id);
+        LeagueLevelModel leagueLevelModel = leagueLevelInfraService.get(userModel.getLevelId());
+        userModel.setLevel(leagueLevelModel.getCode());
+        return userModel;
+    }
 
 }

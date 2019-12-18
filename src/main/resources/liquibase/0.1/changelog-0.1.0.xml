@@ -11,8 +11,8 @@
                 <tableExists tableName="league_level" schemaName="public"/>
             </not>
         </preConditions>
-        <createTable tableName="league_level" remarks="Таблица уроыней лиг">
-            <column name="id" type="int" autoIncrement="true">
+        <createTable tableName="league_level" remarks="Таблица уровней лиг">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="created" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -42,6 +42,49 @@
             INSERT INTO "public"."league_level" ("code", "name")
             VALUES ('FIRST', 'First')
         </sql>
+        <rollback>
+            DELETE FROM "public"."league_level" WHERE code = 'FIRST';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="league_version_table" author="almaz.nurmukhametov">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="league_version" schemaName="public"/>
+            </not>
+        </preConditions>
+        <createTable tableName="league_version" remarks="Таблица версий уровня">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="int" remarks="Версия лиги">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="league_version" schemaName="public"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="fill_league_version" author="almaz.nurmukhametov">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="league_version"/>
+            <sqlCheck expectedResult="0">
+                SELECT count (1) FROM league_version;
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO "public"."league_version" ("version")
+            VALUES (1)
+        </sql>
+        <rollback>
+            DELETE FROM league_version;
+        </rollback>
+
     </changeSet>
 
     <changeSet id="create_user_table" author="almaz.nurmukhametov">
@@ -51,7 +94,7 @@
             </not>
         </preConditions>
         <createTable tableName="user" remarks="Таблица пользователей и его опыта">
-            <column name="id" type="int">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
             <column name="created" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -60,10 +103,16 @@
             <column name="experience" type="int" remarks="Количество опыта" defaultValue="0">
                 <constraints nullable="false"/>
             </column>
-            <column name="level_id" type="int" remarks="идентификатор уровня лиги">
+            <column name="level_id" type="bigint" remarks="идентификатор уровня лиги">
                 <constraints nullable="false"
                              foreignKeyName="user_level_id_fk" referencedTableName="league_level"
                              referencedColumnNames="id"/>
+            </column>
+            <column name="telegram_id" type="bigint" remarks="идентификатор пользователя telegram">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_name" type="varchar" remarks="имя пользователя">
+                <constraints nullable="false"/>
             </column>
         </createTable>
 
@@ -95,15 +144,15 @@
             </not>
         </preConditions>
         <createTable tableName="user_friend" remarks="Таблица связи друзей">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="int" remarks="идентификатор пользователя">
+            <column name="user_id" type="bigint" remarks="идентификатор пользователя">
                 <constraints nullable="false"
                              foreignKeyName="user_friend_user_id_fk" referencedTableName="user"
                              referencedColumnNames="id"/>
             </column>
-            <column name="user_friend_id" type="int" remarks="идентификатор друга пользователя">
+            <column name="user_friend_id" type="bigint" remarks="идентификатор друга пользователя">
                 <constraints nullable="false"
                              foreignKeyName="user_user_id_fk" referencedTableName="user"
                              referencedColumnNames="id"/>
@@ -176,19 +225,24 @@
             </not>
         </preConditions>
         <createTable tableName="league" remarks="Таблица лиги, опыт всех пользователей">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="int" remarks="идентификатор пользователя">
+            <column name="user_id" type="bigint" remarks="идентификатор пользователя">
                 <constraints nullable="false" foreignKeyName="league_user_id_fk" referencedTableName="user"
                              referencedColumnNames="id"/>
             </column>
             <column name="experience" type="int" remarks="Количество опыта" defaultValue="0">
                 <constraints nullable="false"/>
             </column>
-            <column name="level_id" type="int" remarks="идентификатор уровня лиги">
+            <column name="level_id" type="bigint" remarks="идентификатор уровня лиги">
                 <constraints nullable="false"
                              foreignKeyName="user_level_id_fk" referencedTableName="league_level"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="league_version_id" type="bigint" remarks="идентификатор версии уровня лиги">
+                <constraints nullable="false"
+                             foreignKeyName="league_league_version_id_fk" referencedTableName="league_version"
                              referencedColumnNames="id"/>
             </column>
             <column name="created" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">

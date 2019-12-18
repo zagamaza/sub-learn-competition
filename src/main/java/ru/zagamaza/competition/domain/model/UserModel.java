@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import ru.zagamaza.competition.infra.dao.jooq.schema.tables.League;
 
 import java.time.OffsetDateTime;
 
@@ -18,6 +19,13 @@ public class UserModel extends DomainModel {
 
     private OffsetDateTime created;
     private Integer experience;
-    private Integer levelId;
+    private Long levelId;
+    private Level level;
+    private Long telegramId;
+    private String userName;
+
+    public UserModel(Long id) {
+        setId(id);
+    }
 
 }

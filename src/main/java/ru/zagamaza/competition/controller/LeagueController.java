@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.zagamaza.competition.domain.model.LeagueModel;
+import ru.zagamaza.competition.domain.model.Level;
 import ru.zagamaza.competition.infra.service.LeagueInfraService;
 
 import javax.validation.Valid;
@@ -24,13 +26,13 @@ public class LeagueController {
     private final LeagueInfraService leagueInfraService;
 
     @GetMapping("/{id}")
-    public LeagueModel get(@PathVariable Integer id) {
+    public LeagueModel get(@PathVariable Long id) {
         return leagueInfraService.get(id);
     }
 
     @GetMapping
-    public Page<LeagueModel> getAll(Pageable pageable) {
-        return leagueInfraService.getAll(pageable);
+    public Page<LeagueModel> getByLeagueLevelCode(@RequestParam Level level, Pageable pageable) {
+        return leagueInfraService.getByLeagueLevelCode(level, pageable);
     }
 
     @PostMapping
@@ -44,7 +46,7 @@ public class LeagueController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Long id) {
         leagueInfraService.delete(id);
     }
 

@@ -26,15 +26,20 @@ public class Sequences {
     /**
      * The sequence <code>public.league_id_seq</code>
      */
-    public static final Sequence<Integer> LEAGUE_ID_SEQ = new SequenceImpl<Integer>("league_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false));
+    public static final Sequence<Long> LEAGUE_ID_SEQ = new SequenceImpl<Long>("league_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
     /**
      * The sequence <code>public.league_level_id_seq</code>
      */
-    public static final Sequence<Integer> LEAGUE_LEVEL_ID_SEQ = new SequenceImpl<Integer>("league_level_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false));
+    public static final Sequence<Long> LEAGUE_LEVEL_ID_SEQ = new SequenceImpl<Long>("league_level_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
+
+    /**
+     * The sequence <code>public.league_version_id_seq</code>
+     */
+    public static final Sequence<Long> LEAGUE_VERSION_ID_SEQ = new SequenceImpl<Long>("league_version_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 
     /**
      * The sequence <code>public.user_friend_id_seq</code>
      */
-    public static final Sequence<Integer> USER_FRIEND_ID_SEQ = new SequenceImpl<Integer>("user_friend_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.INTEGER.nullable(false));
+    public static final Sequence<Long> USER_FRIEND_ID_SEQ = new SequenceImpl<Long>("user_friend_id_seq", Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT.nullable(false));
 }

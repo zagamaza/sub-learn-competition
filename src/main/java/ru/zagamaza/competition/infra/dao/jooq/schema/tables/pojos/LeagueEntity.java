@@ -25,12 +25,13 @@ import ru.zagamaza.competition.infra.dao.entity.Entity;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LeagueEntity implements Entity, Serializable {
 
-    private static final long serialVersionUID = 1454792963;
+    private static final long serialVersionUID = -422206627;
 
-    private Integer        id;
-    private Integer        userId;
+    private Long           id;
+    private Long           userId;
     private Integer        experience;
-    private Integer        levelId;
+    private Long           levelId;
+    private Long           leagueVersionId;
     private OffsetDateTime created;
 
     public LeagueEntity() {}
@@ -40,36 +41,39 @@ public class LeagueEntity implements Entity, Serializable {
         this.userId = value.userId;
         this.experience = value.experience;
         this.levelId = value.levelId;
+        this.leagueVersionId = value.leagueVersionId;
         this.created = value.created;
     }
 
     public LeagueEntity(
-        Integer        id,
-        Integer        userId,
+        Long           id,
+        Long           userId,
         Integer        experience,
-        Integer        levelId,
+        Long           levelId,
+        Long           leagueVersionId,
         OffsetDateTime created
     ) {
         this.id = id;
         this.userId = userId;
         this.experience = experience;
         this.levelId = levelId;
+        this.leagueVersionId = leagueVersionId;
         this.created = created;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return this.userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -81,12 +85,20 @@ public class LeagueEntity implements Entity, Serializable {
         this.experience = experience;
     }
 
-    public Integer getLevelId() {
+    public Long getLevelId() {
         return this.levelId;
     }
 
-    public void setLevelId(Integer levelId) {
+    public void setLevelId(Long levelId) {
         this.levelId = levelId;
+    }
+
+    public Long getLeagueVersionId() {
+        return this.leagueVersionId;
+    }
+
+    public void setLeagueVersionId(Long leagueVersionId) {
+        this.leagueVersionId = leagueVersionId;
     }
 
     public OffsetDateTime getCreated() {
@@ -130,6 +142,12 @@ public class LeagueEntity implements Entity, Serializable {
         }
         else if (!levelId.equals(other.levelId))
             return false;
+        if (leagueVersionId == null) {
+            if (other.leagueVersionId != null)
+                return false;
+        }
+        else if (!leagueVersionId.equals(other.leagueVersionId))
+            return false;
         if (created == null) {
             if (other.created != null)
                 return false;
@@ -147,6 +165,7 @@ public class LeagueEntity implements Entity, Serializable {
         result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
         result = prime * result + ((this.experience == null) ? 0 : this.experience.hashCode());
         result = prime * result + ((this.levelId == null) ? 0 : this.levelId.hashCode());
+        result = prime * result + ((this.leagueVersionId == null) ? 0 : this.leagueVersionId.hashCode());
         result = prime * result + ((this.created == null) ? 0 : this.created.hashCode());
         return result;
     }
@@ -159,6 +178,7 @@ public class LeagueEntity implements Entity, Serializable {
         sb.append(", ").append(userId);
         sb.append(", ").append(experience);
         sb.append(", ").append(levelId);
+        sb.append(", ").append(leagueVersionId);
         sb.append(", ").append(created);
 
         sb.append(")");

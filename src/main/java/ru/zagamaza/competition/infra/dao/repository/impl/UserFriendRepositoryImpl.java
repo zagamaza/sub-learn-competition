@@ -18,7 +18,7 @@ public class UserFriendRepositoryImpl implements UserFriendRepository {
     private final DSLContext dslContext;
 
     @Override
-    public UserFriendEntity get(Integer id) {
+    public UserFriendEntity get(Long id) {
         return dslContext
                 .select()
                 .from(USER_FRIEND_ENTITY)
@@ -28,9 +28,9 @@ public class UserFriendRepositoryImpl implements UserFriendRepository {
                 .into(UserFriendEntity.class);
     }
 
-    private NotFoundException generateNotFoundException(Integer id) {
+    private NotFoundException generateNotFoundException(Long id) {
         return new NotFoundException(
-                "msz.not.found.exception"
+                "userFriend.not.found.exception"
         );
     }
 
@@ -49,7 +49,7 @@ public class UserFriendRepositoryImpl implements UserFriendRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         dslContext.deleteFrom(USER_FRIEND_ENTITY)
                   .where(USER_FRIEND_ENTITY.ID.eq(id))
                   .execute();
@@ -60,6 +60,13 @@ public class UserFriendRepositoryImpl implements UserFriendRepository {
                 USER_FRIEND_ENTITY,
                 entity
         );
+    }
+
+    @Override
+    public void deleteByUserIdAndUserFriendId(Long userId, Long userFriendId) {
+        dslContext.deleteFrom(USER_FRIEND_ENTITY)
+                  .where(USER_FRIEND_ENTITY.USER_ID.eq(userId).and(USER_FRIEND_ENTITY.USER_FRIEND_ID.eq(userFriendId)))
+                  .execute();
     }
 
 }

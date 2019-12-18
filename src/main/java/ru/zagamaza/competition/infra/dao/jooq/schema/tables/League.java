@@ -42,7 +42,7 @@ import ru.zagamaza.competition.infra.dao.jooq.schema.tables.records.LeagueRecord
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class League extends TableImpl<LeagueRecord> {
 
-    private static final long serialVersionUID = -843562539;
+    private static final long serialVersionUID = -698299841;
 
     /**
      * The reference instance of <code>public.league</code>
@@ -60,12 +60,12 @@ public class League extends TableImpl<LeagueRecord> {
     /**
      * The column <code>public.league.id</code>.
      */
-    public final TableField<LeagueRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('league_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<LeagueRecord, Long> ID = createField("id", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('league_id_seq'::regclass)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>public.league.user_id</code>. идентификатор пользователя
      */
-    public final TableField<LeagueRecord, Integer> USER_ID = createField("user_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "идентификатор пользователя");
+    public final TableField<LeagueRecord, Long> USER_ID = createField("user_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "идентификатор пользователя");
 
     /**
      * The column <code>public.league.experience</code>. Количество опыта
@@ -75,7 +75,12 @@ public class League extends TableImpl<LeagueRecord> {
     /**
      * The column <code>public.league.level_id</code>. идентификатор уровня лиги
      */
-    public final TableField<LeagueRecord, Integer> LEVEL_ID = createField("level_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "идентификатор уровня лиги");
+    public final TableField<LeagueRecord, Long> LEVEL_ID = createField("level_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "идентификатор уровня лиги");
+
+    /**
+     * The column <code>public.league.league_version_id</code>. идентификатор версии уровня лиги
+     */
+    public final TableField<LeagueRecord, Long> LEAGUE_VERSION_ID = createField("league_version_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "идентификатор версии уровня лиги");
 
     /**
      * The column <code>public.league.created</code>.
@@ -135,7 +140,7 @@ public class League extends TableImpl<LeagueRecord> {
      * {@inheritDoc}
      */
     @Override
-    public Identity<LeagueRecord, Integer> getIdentity() {
+    public Identity<LeagueRecord, Long> getIdentity() {
         return Keys.IDENTITY_LEAGUE_ENTITY;
     }
 
@@ -160,7 +165,7 @@ public class League extends TableImpl<LeagueRecord> {
      */
     @Override
     public List<ForeignKey<LeagueRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<LeagueRecord, ?>>asList(Keys.LEAGUE__LEAGUE_USER_ID_FK, Keys.LEAGUE__USER_LEVEL_ID_FK);
+        return Arrays.<ForeignKey<LeagueRecord, ?>>asList(Keys.LEAGUE__LEAGUE_USER_ID_FK, Keys.LEAGUE__USER_LEVEL_ID_FK, Keys.LEAGUE__LEAGUE_LEAGUE_VERSION_ID_FK);
     }
 
     public User user() {
@@ -169,6 +174,10 @@ public class League extends TableImpl<LeagueRecord> {
 
     public LeagueLevel leagueLevel() {
         return new LeagueLevel(this, Keys.LEAGUE__USER_LEVEL_ID_FK);
+    }
+
+    public LeagueVersion leagueVersion() {
+        return new LeagueVersion(this, Keys.LEAGUE__LEAGUE_LEAGUE_VERSION_ID_FK);
     }
 
     /**

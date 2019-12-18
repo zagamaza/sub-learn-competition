@@ -2,6 +2,7 @@ package ru.zagamaza.competition.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import ru.zagamaza.competition.controller.presenter.ErrorResponse;
 import ru.zagamaza.competition.exception.SubLearnException;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -22,10 +24,16 @@ import static net.logstash.logback.argument.StructuredArguments.keyValue;
 @RequiredArgsConstructor
 public class RestResponseExceptionHandler {
 
+    private final MessageSource messageSource;
+
     @ExceptionHandler(SubLearnException.class)
     protected ResponseEntity<ErrorResponse> handleCocosError(final SubLearnException ex) {
         logError(ex.getUuid(), ex.getMessage(), ex);
-        ErrorResponse errorResponse = new ErrorResponse(ex.getUuid(), LocalDateTime.now(), ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(
+                ex.getUuid(),
+                LocalDateTime.now(),
+                getMessage(ex.getMessage(), ex.getArgs())
+        );
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -66,6 +74,10 @@ public class RestResponseExceptionHandler {
                 keyValue("messages", message),
                 keyValue("result", throwable)
         );
+    }
+
+    private String getMessage(String key, Object... args) {
+        return this.messageSource.getMessage(key, args, Locale.getDefault());
     }
 
 }

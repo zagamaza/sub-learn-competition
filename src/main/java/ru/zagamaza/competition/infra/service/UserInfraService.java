@@ -8,10 +8,12 @@ import java.util.List;
 
 public interface UserInfraService extends BaseResourceInfraService<UserModel> {
 
-    Page<UserModel> getByUserFriendUserId(Integer userId, Pageable pageable);
+    Page<UserModel> getByUserFriendUserId(Long userId, Pageable pageable);
 
-    void createOrUpdateExperience(Integer userId);
+    void createOrUpdateExperience(UserModel userModel);
 
     List<UserModel> findAll();
+
+    UserModel getByTelegramId(Long telegramId);
 
 }

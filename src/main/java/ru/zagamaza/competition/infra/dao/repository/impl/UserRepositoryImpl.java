@@ -2,6 +2,8 @@ package ru.zagamaza.competition.infra.dao.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.impl.DSL;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import ru.zagamaza.competition.exception.domain.NotFoundException;
@@ -21,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
     private final DSLContext dslContext;
 
     @Override
-    public UserEntity get(Integer id) {
+    public UserEntity get(Long id) {
         return dslContext
                 .select()
                 .from(USER_ENTITY)
@@ -39,14 +41,14 @@ public class UserRepositoryImpl implements UserRepository {
                 .fetchInto(UserEntity.class);
     }
 
-    private NotFoundException generateNotFoundException(Integer id) {
+    private NotFoundException generateNotFoundException(Long id) {
         return new NotFoundException(
-                "msz.not.found.exception"
+                "user.not.found.exception"
         );
     }
 
     @Override
-    public boolean checkExists(Integer id) {
+    public boolean checkExists(Long id) {
         return dslContext.fetchExists(
                 dslContext.selectFrom(USER_ENTITY).where(USER_ENTITY.ID.eq(id)));
     }
@@ -54,7 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserEntity create(UserEntity entity) {
         UserRecord record = generateRecord(entity);
-        dslContext.executeInsert(record);
+        record.store();
         return record.into(UserEntity.class);
     }
 
@@ -67,7 +69,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         dslContext.deleteFrom(USER_ENTITY)
                   .where(USER_ENTITY.ID.eq(id))
                   .execute();
@@ -81,7 +83,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<UserEntity> getByUserFriendUserId(Integer userId, Pageable pageable) {
+    public List<UserEntity> getByUserFriendUserId(Long userId, Pageable pageable) {
         return dslContext
                 .select(USER_ENTITY.fields())
                 .from(USER_ENTITY)
@@ -89,22 +91,31 @@ public class UserRepositoryImpl implements UserRepository {
                 .where(USER_FRIEND_ENTITY.USER_ID.eq(userId))
                 .orderBy(USER_ENTITY.EXPERIENCE.desc())
                 .offset((int)pageable.getOffset())
-                .limit(pageable.getPageSize() - 1)
-                .union(dslContext
-                               .select()
-                               .from(USER_ENTITY)
-                               .where(USER_ENTITY.ID.eq(userId)))
+                .limit(pageable.getPageSize())
                 .fetchInto(UserEntity.class);
     }
 
     @Override
-    public Integer getCountByUserFriendUserId(Integer userId) {
+    public Integer getCountByUserFriendUserId(Long userId) {
         return dslContext
-                .select(USER_ENTITY.fields())
+                .select(DSL.count(USER_ENTITY.ID))
                 .from(USER_ENTITY)
                 .join(USER_FRIEND_ENTITY).on(USER_ENTITY.ID.eq(USER_FRIEND_ENTITY.USER_FRIEND_ID))
                 .where(USER_FRIEND_ENTITY.USER_ID.eq(userId))
                 .fetchOne(0, Integer.class);
+    }
+
+    @Override
+    public UserEntity getByTelegramId(Long telegramId) {
+        Record record = dslContext
+                .select()
+                .from(USER_ENTITY)
+                .where(USER_ENTITY.TELEGRAM_ID.eq(telegramId))
+                .fetchOne();
+        if (record == null) {
+            return null;
+        }
+        return record.into(UserEntity.class);
     }
 
 }

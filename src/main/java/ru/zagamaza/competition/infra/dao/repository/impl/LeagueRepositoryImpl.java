@@ -5,14 +5,21 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import ru.zagamaza.competition.domain.model.Level;
 import ru.zagamaza.competition.exception.domain.NotFoundException;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.pojos.LeagueEntity;
+import ru.zagamaza.competition.infra.dao.jooq.schema.tables.pojos.LeagueVersionEntity;
+import ru.zagamaza.competition.infra.dao.jooq.schema.tables.pojos.UserEntity;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.records.LeagueRecord;
 import ru.zagamaza.competition.infra.dao.repository.LeagueRepository;
 
-import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static ru.zagamaza.competition.infra.dao.jooq.schema.Tables.LEAGUE_ENTITY;
+import static ru.zagamaza.competition.infra.dao.jooq.schema.Tables.LEAGUE_LEVEL_ENTITY;
+import static ru.zagamaza.competition.infra.dao.jooq.schema.Tables.LEAGUE_VERSION_ENTITY;
+import static ru.zagamaza.competition.infra.dao.jooq.schema.Tables.USER_ENTITY;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,7 +28,7 @@ public class LeagueRepositoryImpl implements LeagueRepository {
     private final DSLContext dslContext;
 
     @Override
-    public LeagueEntity get(Integer id) {
+    public LeagueEntity get(Long id) {
         return dslContext
                 .select()
                 .from(LEAGUE_ENTITY)
@@ -31,21 +38,39 @@ public class LeagueRepositoryImpl implements LeagueRepository {
                 .into(LeagueEntity.class);
     }
 
-    private NotFoundException generateNotFoundException(Integer id) {
+    private NotFoundException generateNotFoundException(Long id) {
         return new NotFoundException(
-                "msz.not.found.exception"
+                "league.not.found.exception"
         );
     }
 
     @Override
-    public List<LeagueEntity> getAll(Pageable pageable) {
+    public Map<LeagueEntity, UserEntity> getByLeagueLevelCode(Level level, Pageable pageable) {
+        LeagueVersionEntity leagueVersionEntity = dslContext
+                .select(LEAGUE_VERSION_ENTITY.fields())
+                .from(LEAGUE_VERSION_ENTITY)
+                .orderBy(LEAGUE_VERSION_ENTITY.VERSION.desc())
+                .limit(1)
+                .fetchOne()
+                .into(LeagueVersionEntity.class);
+
         return dslContext
                 .select()
                 .from(LEAGUE_ENTITY)
+                .join(LEAGUE_LEVEL_ENTITY).on(LEAGUE_ENTITY.LEVEL_ID.eq(LEAGUE_LEVEL_ENTITY.ID))
+                .join(LEAGUE_VERSION_ENTITY).on(LEAGUE_ENTITY.LEAGUE_VERSION_ID.eq(LEAGUE_VERSION_ENTITY.ID))
+                .join(USER_ENTITY).on(USER_ENTITY.ID.eq(LEAGUE_ENTITY.USER_ID))
+                .where(LEAGUE_VERSION_ENTITY.ID.eq(leagueVersionEntity.getId())
+                                               .and(LEAGUE_LEVEL_ENTITY.CODE.eq(level.name())))
                 .orderBy(LEAGUE_ENTITY.EXPERIENCE.desc())
                 .offset((int)pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchInto(LeagueEntity.class);
+                .fetchGroups(
+                        record -> record.into(LEAGUE_ENTITY).into(LeagueEntity.class),
+                        record -> record.into(USER_ENTITY).into(UserEntity.class)
+                ).entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(0)));
     }
 
     @Override
@@ -53,18 +78,17 @@ public class LeagueRepositoryImpl implements LeagueRepository {
         return dslContext
                 .select(DSL.count(LEAGUE_ENTITY.ID))
                 .from(LEAGUE_ENTITY)
-                .orderBy(LEAGUE_ENTITY.EXPERIENCE.desc())
                 .fetchOne(0, Integer.class);
     }
 
     @Override
-    public boolean checkExists(Integer userId) {
+    public boolean checkExists(Long userId) {
         return dslContext.fetchExists(
                 dslContext.selectFrom(LEAGUE_ENTITY).where(LEAGUE_ENTITY.USER_ID.eq(userId)));
     }
 
     @Override
-    public LeagueEntity findLastByUserId(Integer userId) {
+    public LeagueEntity findLastByUserId(Long userId) {
         return dslContext
                 .select()
                 .from(LEAGUE_ENTITY)
@@ -91,7 +115,7 @@ public class LeagueRepositoryImpl implements LeagueRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         dslContext.deleteFrom(LEAGUE_ENTITY)
                   .where(LEAGUE_ENTITY.ID.eq(id))
                   .execute();

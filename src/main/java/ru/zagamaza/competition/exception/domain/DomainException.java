@@ -10,6 +10,10 @@ public class DomainException extends SubLearnException {
         super(message, cause);
     }
 
+    public DomainException(String message, String args, Throwable cause) {
+        super(message, args, cause);
+    }
+
     public DomainException(String message) {
         super(message);
     }

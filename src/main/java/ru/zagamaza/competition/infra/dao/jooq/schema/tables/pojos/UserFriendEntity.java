@@ -25,11 +25,11 @@ import ru.zagamaza.competition.infra.dao.entity.Entity;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserFriendEntity implements Entity, Serializable {
 
-    private static final long serialVersionUID = 820680147;
+    private static final long serialVersionUID = -1674669585;
 
-    private Integer        id;
-    private Integer        userId;
-    private Integer        userFriendId;
+    private Long           id;
+    private Long           userId;
+    private Long           userFriendId;
     private OffsetDateTime created;
 
     public UserFriendEntity() {}
@@ -42,9 +42,9 @@ public class UserFriendEntity implements Entity, Serializable {
     }
 
     public UserFriendEntity(
-        Integer        id,
-        Integer        userId,
-        Integer        userFriendId,
+        Long           id,
+        Long           userId,
+        Long           userFriendId,
         OffsetDateTime created
     ) {
         this.id = id;
@@ -53,27 +53,27 @@ public class UserFriendEntity implements Entity, Serializable {
         this.created = created;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return this.userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public Integer getUserFriendId() {
+    public Long getUserFriendId() {
         return this.userFriendId;
     }
 
-    public void setUserFriendId(Integer userFriendId) {
+    public void setUserFriendId(Long userFriendId) {
         this.userFriendId = userFriendId;
     }
 

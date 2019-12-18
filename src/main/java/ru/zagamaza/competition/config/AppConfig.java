@@ -1,6 +1,5 @@
 package ru.zagamaza.competition.config;
 
-import org.springframework.amqp.core.Queue;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +24,6 @@ public class AppConfig {
         LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
         localValidatorFactoryBean.setValidationMessageSource(messageSource);
         return localValidatorFactoryBean;
-    }
-
-    @Bean
-    public Queue myQueue() {
-        return new Queue("trial-word-result", false);
     }
 
 }

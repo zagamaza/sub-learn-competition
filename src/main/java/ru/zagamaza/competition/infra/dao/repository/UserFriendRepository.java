@@ -4,4 +4,6 @@ import ru.zagamaza.competition.infra.dao.jooq.schema.tables.pojos.UserFriendEnti
 
 public interface UserFriendRepository extends BaseRepository<UserFriendEntity> {
 
+    void deleteByUserIdAndUserFriendId(Long userId, Long userFriendId);
+
 }

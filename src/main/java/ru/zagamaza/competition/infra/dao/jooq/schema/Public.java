@@ -17,6 +17,7 @@ import org.jooq.impl.SchemaImpl;
 
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.League;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueLevel;
+import ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueVersion;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.User;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.UserFriend;
 
@@ -34,7 +35,7 @@ import ru.zagamaza.competition.infra.dao.jooq.schema.tables.UserFriend;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -690606862;
+    private static final long serialVersionUID = 2033148666;
 
     /**
      * The reference instance of <code>public</code>
@@ -47,9 +48,14 @@ public class Public extends SchemaImpl {
     public final League LEAGUE_ENTITY = ru.zagamaza.competition.infra.dao.jooq.schema.tables.League.LEAGUE_ENTITY;
 
     /**
-     * Таблица уроыней лиг
+     * Таблица уровней лиг
      */
     public final LeagueLevel LEAGUE_LEVEL_ENTITY = ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueLevel.LEAGUE_LEVEL_ENTITY;
+
+    /**
+     * Таблица версий уровня
+     */
+    public final LeagueVersion LEAGUE_VERSION_ENTITY = ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueVersion.LEAGUE_VERSION_ENTITY;
 
     /**
      * Таблица пользователей и его опыта
@@ -88,6 +94,7 @@ public class Public extends SchemaImpl {
         return Arrays.<Sequence<?>>asList(
             Sequences.LEAGUE_ID_SEQ,
             Sequences.LEAGUE_LEVEL_ID_SEQ,
+            Sequences.LEAGUE_VERSION_ID_SEQ,
             Sequences.USER_FRIEND_ID_SEQ);
     }
 
@@ -102,6 +109,7 @@ public class Public extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             League.LEAGUE_ENTITY,
             LeagueLevel.LEAGUE_LEVEL_ENTITY,
+            LeagueVersion.LEAGUE_VERSION_ENTITY,
             User.USER_ENTITY,
             UserFriend.USER_FRIEND_ENTITY);
     }

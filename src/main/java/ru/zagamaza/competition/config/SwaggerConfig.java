@@ -34,7 +34,7 @@ public class SwaggerConfig {
 
     private ApiInfo buildApiInfo() {
         return new ApiInfoBuilder()
-                .title("dd")
+                .title("sub-learn-competition")
                 .version(projectVersion)
                 .build();
     }

@@ -16,7 +16,7 @@ public abstract class BaseResourceInfraServiceImpl<E extends Entity, M extends D
     private final BaseService<M> baseService;
     private final BaseMapper<E, M> modelMapper;
 
-    public M get(Integer id) {
+    public M get(Long id) {
         E entity = repository.get(id);
         return modelMapper.entityToModel(entity);
     }
@@ -33,7 +33,7 @@ public abstract class BaseResourceInfraServiceImpl<E extends Entity, M extends D
         return modelMapper.entityToModel(entity);
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         repository.delete(id);
     }
 

@@ -13,7 +13,7 @@ import ru.zagamaza.competition.infra.dao.entity.Entity;
 
 
 /**
- * Таблица уроыней лиг
+ * Таблица уровней лиг
  */
 @Generated(
     value = {
@@ -25,9 +25,9 @@ import ru.zagamaza.competition.infra.dao.entity.Entity;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LeagueLevelEntity implements Entity, Serializable {
 
-    private static final long serialVersionUID = 2083243513;
+    private static final long serialVersionUID = 160138330;
 
-    private Integer        id;
+    private Long           id;
     private OffsetDateTime created;
     private String         code;
     private String         name;
@@ -42,7 +42,7 @@ public class LeagueLevelEntity implements Entity, Serializable {
     }
 
     public LeagueLevelEntity(
-        Integer        id,
+        Long           id,
         OffsetDateTime created,
         String         code,
         String         name
@@ -53,11 +53,11 @@ public class LeagueLevelEntity implements Entity, Serializable {
         this.name = name;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

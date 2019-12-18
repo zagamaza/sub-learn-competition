@@ -30,7 +30,7 @@ import ru.zagamaza.competition.infra.dao.jooq.schema.tables.records.LeagueLevelR
 
 
 /**
- * Таблица уроыней лиг
+ * Таблица уровней лиг
  */
 @Generated(
     value = {
@@ -42,7 +42,7 @@ import ru.zagamaza.competition.infra.dao.jooq.schema.tables.records.LeagueLevelR
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LeagueLevel extends TableImpl<LeagueLevelRecord> {
 
-    private static final long serialVersionUID = 2013485825;
+    private static final long serialVersionUID = 957120123;
 
     /**
      * The reference instance of <code>public.league_level</code>
@@ -60,7 +60,7 @@ public class LeagueLevel extends TableImpl<LeagueLevelRecord> {
     /**
      * The column <code>public.league_level.id</code>.
      */
-    public final TableField<LeagueLevelRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('league_level_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<LeagueLevelRecord, Long> ID = createField("id", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('league_level_id_seq'::regclass)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>public.league_level.created</code>.
@@ -103,7 +103,7 @@ public class LeagueLevel extends TableImpl<LeagueLevelRecord> {
     }
 
     private LeagueLevel(Name alias, Table<LeagueLevelRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("Таблица уроыней лиг"));
+        super(alias, null, aliased, parameters, DSL.comment("Таблица уровней лиг"));
     }
 
     public <O extends Record> LeagueLevel(Table<O> child, ForeignKey<O, LeagueLevelRecord> key) {
@@ -130,7 +130,7 @@ public class LeagueLevel extends TableImpl<LeagueLevelRecord> {
      * {@inheritDoc}
      */
     @Override
-    public Identity<LeagueLevelRecord, Integer> getIdentity() {
+    public Identity<LeagueLevelRecord, Long> getIdentity() {
         return Keys.IDENTITY_LEAGUE_LEVEL_ENTITY;
     }
 

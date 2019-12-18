@@ -8,8 +8,8 @@ public class NotFoundException extends DomainException {
         this.httpStatus = HttpStatus.NOT_FOUND;
     }
 
-    public NotFoundException(String message, Throwable cause) {
-        super(message, cause);
+    public NotFoundException(String message, String args, Throwable cause) {
+        super(message, args, cause);
     }
 
     public NotFoundException(Throwable cause) {

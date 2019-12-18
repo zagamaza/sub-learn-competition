@@ -8,6 +8,7 @@ import javax.annotation.Generated;
 
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.League;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueLevel;
+import ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueVersion;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.User;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.UserFriend;
 
@@ -31,9 +32,14 @@ public class Tables {
     public static final League LEAGUE_ENTITY = ru.zagamaza.competition.infra.dao.jooq.schema.tables.League.LEAGUE_ENTITY;
 
     /**
-     * Таблица уроыней лиг
+     * Таблица уровней лиг
      */
     public static final LeagueLevel LEAGUE_LEVEL_ENTITY = ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueLevel.LEAGUE_LEVEL_ENTITY;
+
+    /**
+     * Таблица версий уровня
+     */
+    public static final LeagueVersion LEAGUE_VERSION_ENTITY = ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueVersion.LEAGUE_VERSION_ENTITY;
 
     /**
      * Таблица пользователей и его опыта

@@ -24,7 +24,7 @@ public class UserFriendController {
     private final UserFriendInfraService userFriendInfraService;
 
     @GetMapping("/{id}")
-    public UserFriendModel get(@PathVariable Integer id) {
+    public UserFriendModel get(@PathVariable Long id) {
         return userFriendInfraService.get(id);
     }
 
@@ -39,7 +39,12 @@ public class UserFriendController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Long id) {
         userFriendInfraService.delete(id);
+    }
+
+    @DeleteMapping("/users/{userId}/userFriend/{userFriendId}")
+    public void delete(@PathVariable Long userId, @PathVariable Long userFriendId) {
+        userFriendInfraService.deleteByUserIdAndUserFriendId(userId, userFriendId);
     }
 }

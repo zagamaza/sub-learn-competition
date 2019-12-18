@@ -1,57 +1,52 @@
-# Микросервис Ведения реестров для соц обеспечения
+[![Build Status](https://travis-ci.org/zagamaza/sub-learn-competition.svg?branch=develop)](https://travis-ci.org/zagamaza/sub-learn-competition)
+# Сервис sub-learn-competition
 
 ## Установка, настройка и запуск
 
 ### Зависимости
 
 * Java OpenJDK 11
-* SpringBoot 2.1.4.RELEASE
+* SpringBoot 2.1.6.RELEASE
+* jOOQ 3.11.11
+* RabbitMQ
 * Gradle 5.4.1
-* Docker, Docker-compose 
-* PostgreSQL 11.2
-* JOOQ 3.11.11
+* MapStruct 1.3.0 Final
 * Lombok 1.18.6
-
+* Spring Cloud 2.1.2.RELEASE
 
 ### Параметры приложения
 
-Все конфигурации проекта лежат в файле application.yaml
-Номер версии version.txt
-
+Все конфигурации проекта лежат в файле
+```
+application.yaml
+```
 
 ### Сборка приложения
 
 Проект собирается gradle’ом из корневой папки при помощи скрипта:
-scripts/build.sh  - Linux
-scripts/build.bat - Windows
 
+```
+build.sh  - Linux
+build.bat - Windows
+```
 
 ### Запуск приложения
 
 Запустить приложение можно выполнив скрипт из корневой папки:
-scripts/start.sh  - Linux 
-scripts/start.bat - Windows
+```
+start.sh  - Linux 
+start.bat - Windows
+```
+### Остановка приложения
 
+Остановить приложение можно последовательно выполнив команды:
+```
+cd docker
+docker-compose -f docker-compose-test.yaml down 
+```
 
 Для локального запуска БД можно последовательно выполнить команды:
 ```
 cd docker
-docker pull cocos-registry.is-mis.ru/infra-images/postgres-jsquery
 docker-compose -f docker-compose-dev.yaml up -d
-```
-
-### Остановка приложения
-
-Остановить приложение можно выполнив команду:
-```
-gradlew composeDown
-```
-
-### Скрипт для сборки в Jenkins (в разработке)
-
-script/pipeline.sh
-
-### Запуск юнит-тестов
-```
-gradlew test
 ```

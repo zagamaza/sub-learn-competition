@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.zagamaza.competition.domain.model.UserModel;
 import ru.zagamaza.competition.infra.service.UserInfraService;
@@ -24,18 +25,18 @@ public class UserController {
     private final UserInfraService userInfraService;
 
     @GetMapping("/{id}")
-    public UserModel get(@PathVariable Integer id) {
+    public UserModel get(@PathVariable Long id) {
         return userInfraService.get(id);
     }
 
-    @GetMapping("/mama/{userId}")
-    public void updateExperience(@PathVariable Integer userId) {
-        userInfraService.createOrUpdateExperience(userId);
+    @GetMapping("/user_friends/{userId}")
+    public Page<UserModel> getByUserFriendUserId(@PathVariable Long userId, Pageable pageable) {
+        return userInfraService.getByUserFriendUserId(userId, pageable);
     }
 
-    @GetMapping("/user_friends/{userId}")
-    public Page<UserModel> getByUserFriendUserId(@PathVariable Integer userId, Pageable pageable) {
-        return userInfraService.getByUserFriendUserId(userId, pageable);
+    @GetMapping("/telegram/{telegramId}")
+    public UserModel getByTelegramId(@PathVariable Long telegramId) {
+        return userInfraService.getByTelegramId(telegramId);
     }
 
     @PostMapping
@@ -49,7 +50,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Long id) {
         userInfraService.delete(id);
     }
 

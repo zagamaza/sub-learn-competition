@@ -42,7 +42,7 @@ import ru.zagamaza.competition.infra.dao.jooq.schema.tables.records.UserFriendRe
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserFriend extends TableImpl<UserFriendRecord> {
 
-    private static final long serialVersionUID = -808863610;
+    private static final long serialVersionUID = 1396018876;
 
     /**
      * The reference instance of <code>public.user_friend</code>
@@ -60,17 +60,17 @@ public class UserFriend extends TableImpl<UserFriendRecord> {
     /**
      * The column <code>public.user_friend.id</code>.
      */
-    public final TableField<UserFriendRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('user_friend_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<UserFriendRecord, Long> ID = createField("id", org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('user_friend_id_seq'::regclass)", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>public.user_friend.user_id</code>. идентификатор пользователя
      */
-    public final TableField<UserFriendRecord, Integer> USER_ID = createField("user_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "идентификатор пользователя");
+    public final TableField<UserFriendRecord, Long> USER_ID = createField("user_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "идентификатор пользователя");
 
     /**
      * The column <code>public.user_friend.user_friend_id</code>. идентификатор друга пользователя
      */
-    public final TableField<UserFriendRecord, Integer> USER_FRIEND_ID = createField("user_friend_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "идентификатор друга пользователя");
+    public final TableField<UserFriendRecord, Long> USER_FRIEND_ID = createField("user_friend_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "идентификатор друга пользователя");
 
     /**
      * The column <code>public.user_friend.created</code>.
@@ -130,7 +130,7 @@ public class UserFriend extends TableImpl<UserFriendRecord> {
      * {@inheritDoc}
      */
     @Override
-    public Identity<UserFriendRecord, Integer> getIdentity() {
+    public Identity<UserFriendRecord, Long> getIdentity() {
         return Keys.IDENTITY_USER_FRIEND_ENTITY;
     }
 

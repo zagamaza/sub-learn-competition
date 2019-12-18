@@ -19,7 +19,7 @@ public class LeagueLevelRepositoryImpl implements LeagueLevelRepository {
     private final DSLContext dslContext;
 
     @Override
-    public LeagueLevelEntity get(Integer id) {
+    public LeagueLevelEntity get(Long id) {
         return dslContext
                 .select()
                 .from(LEAGUE_LEVEL_ENTITY)
@@ -29,9 +29,9 @@ public class LeagueLevelRepositoryImpl implements LeagueLevelRepository {
                 .into(LeagueLevelEntity.class);
     }
 
-    private NotFoundException generateNotFoundException(Integer id) {
+    private NotFoundException generateNotFoundException(Long id) {
         return new NotFoundException(
-                "msz.not.found.exception"
+                "leagueLevel.not.found.exception"
         );
     }
 
@@ -50,7 +50,7 @@ public class LeagueLevelRepositoryImpl implements LeagueLevelRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         dslContext.deleteFrom(LEAGUE_LEVEL_ENTITY)
                   .where(LEAGUE_LEVEL_ENTITY.ID.eq(id))
                   .execute();

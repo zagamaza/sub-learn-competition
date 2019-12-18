@@ -24,4 +24,9 @@ public class UserFriendInfraServiceImpl extends BaseResourceInfraServiceImpl<Use
         super(repository, baseService, baseMapper);
     }
 
+    @Override
+    public void deleteByUserIdAndUserFriendId(Long userId, Long userFriendId) {
+        ((UserFriendRepository)getRepository()).deleteByUserIdAndUserFriendId(userId, userFriendId);
+    }
+
 }

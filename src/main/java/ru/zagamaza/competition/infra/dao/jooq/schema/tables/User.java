@@ -41,7 +41,7 @@ import ru.zagamaza.competition.infra.dao.jooq.schema.tables.records.UserRecord;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = -362360018;
+    private static final long serialVersionUID = 2146083503;
 
     /**
      * The reference instance of <code>public.user</code>
@@ -59,7 +59,7 @@ public class User extends TableImpl<UserRecord> {
     /**
      * The column <code>public.user.id</code>.
      */
-    public final TableField<UserRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<UserRecord, Long> ID = createField("id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.user.created</code>.
@@ -74,7 +74,17 @@ public class User extends TableImpl<UserRecord> {
     /**
      * The column <code>public.user.level_id</code>. идентификатор уровня лиги
      */
-    public final TableField<UserRecord, Integer> LEVEL_ID = createField("level_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "идентификатор уровня лиги");
+    public final TableField<UserRecord, Long> LEVEL_ID = createField("level_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "идентификатор уровня лиги");
+
+    /**
+     * The column <code>public.user.telegram_id</code>. идентификатор пользователя telegram
+     */
+    public final TableField<UserRecord, Long> TELEGRAM_ID = createField("telegram_id", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "идентификатор пользователя telegram");
+
+    /**
+     * The column <code>public.user.user_name</code>. имя пользователя
+     */
+    public final TableField<UserRecord, String> USER_NAME = createField("user_name", org.jooq.impl.SQLDataType.VARCHAR.nullable(false), this, "имя пользователя");
 
     /**
      * Create a <code>public.user</code> table reference

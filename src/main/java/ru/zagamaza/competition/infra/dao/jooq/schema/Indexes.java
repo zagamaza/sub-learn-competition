@@ -12,6 +12,7 @@ import org.jooq.impl.Internal;
 
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.League;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueLevel;
+import ru.zagamaza.competition.infra.dao.jooq.schema.tables.LeagueVersion;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.User;
 import ru.zagamaza.competition.infra.dao.jooq.schema.tables.UserFriend;
 
@@ -37,6 +38,7 @@ public class Indexes {
     public static final Index LEAGUE_PKEY = Indexes0.LEAGUE_PKEY;
     public static final Index LEAGUE_USER_ID_IX = Indexes0.LEAGUE_USER_ID_IX;
     public static final Index LEAGUE_LEVEL_PKEY = Indexes0.LEAGUE_LEVEL_PKEY;
+    public static final Index LEAGUE_VERSION_PKEY = Indexes0.LEAGUE_VERSION_PKEY;
     public static final Index USER_LEVEL_ID_IX = Indexes0.USER_LEVEL_ID_IX;
     public static final Index USER_PKEY = Indexes0.USER_PKEY;
     public static final Index USER_FRIEND_PKEY = Indexes0.USER_FRIEND_PKEY;
@@ -53,6 +55,7 @@ public class Indexes {
         public static Index LEAGUE_PKEY = Internal.createIndex("league_pkey", League.LEAGUE_ENTITY, new OrderField[] { League.LEAGUE_ENTITY.ID }, true);
         public static Index LEAGUE_USER_ID_IX = Internal.createIndex("league_user_id_ix", League.LEAGUE_ENTITY, new OrderField[] { League.LEAGUE_ENTITY.USER_ID }, false);
         public static Index LEAGUE_LEVEL_PKEY = Internal.createIndex("league_level_pkey", LeagueLevel.LEAGUE_LEVEL_ENTITY, new OrderField[] { LeagueLevel.LEAGUE_LEVEL_ENTITY.ID }, true);
+        public static Index LEAGUE_VERSION_PKEY = Internal.createIndex("league_version_pkey", LeagueVersion.LEAGUE_VERSION_ENTITY, new OrderField[] { LeagueVersion.LEAGUE_VERSION_ENTITY.ID }, true);
         public static Index USER_LEVEL_ID_IX = Internal.createIndex("user_level_id_ix", User.USER_ENTITY, new OrderField[] { User.USER_ENTITY.LEVEL_ID }, false);
         public static Index USER_PKEY = Internal.createIndex("user_pkey", User.USER_ENTITY, new OrderField[] { User.USER_ENTITY.ID }, true);
         public static Index USER_FRIEND_PKEY = Internal.createIndex("user_friend_pkey", UserFriend.USER_FRIEND_ENTITY, new OrderField[] { UserFriend.USER_FRIEND_ENTITY.ID }, true);
