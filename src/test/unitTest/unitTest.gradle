@@ -1,0 +1,11 @@
+sourceSets {
+    test {
+        groovy.srcDir file('src/test/unitTest/groovy')
+        resources.srcDir file('src/test/unitTest/resources')
+    }
+}
+ 
+test {
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+}
