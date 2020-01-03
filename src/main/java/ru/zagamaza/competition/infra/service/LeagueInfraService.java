@@ -16,4 +16,6 @@ public interface LeagueInfraService extends BaseResourceInfraService<LeagueModel
 
     Page<LeagueModel> getByLeagueLevelCode(Level level, Pageable pageable);
 
+    Page<LeagueModel> getPageWithUserByUserId(Long userId);
+
 }

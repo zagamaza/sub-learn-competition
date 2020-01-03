@@ -19,4 +19,6 @@ public interface LeagueRepository extends BaseRepository<LeagueEntity> {
 
     LeagueEntity findLastByUserId(Long userId);
 
+    Integer getNumberInLeague(Long userId, Level code);
+
 }
