@@ -2,6 +2,7 @@ package ru.zagamaza.competition.infra.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -104,6 +105,14 @@ public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueE
         Integer countAll = repository.getCountAll();
         return new PageImpl<>(leagueModels, pageable, countAll);
 
+    }
+
+    @Override
+    public Page<LeagueModel> getPageWithUserByUserId(Long userId) {
+        UserModel userModel = userInfraService.get(userId);
+        LeagueLevelModel leagueLevelModel = leagueLevelInfraService.get(userModel.getLevelId());
+        Integer numberInLeague = repository.getNumberInLeague(userId, leagueLevelModel.getCode());
+        return getByLeagueLevelCode(leagueLevelModel.getCode(), PageRequest.of(numberInLeague/10,10));
     }
 
 }

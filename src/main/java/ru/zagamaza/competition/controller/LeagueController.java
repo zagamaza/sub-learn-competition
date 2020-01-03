@@ -35,6 +35,11 @@ public class LeagueController {
         return leagueInfraService.getByLeagueLevelCode(level, pageable);
     }
 
+    @GetMapping("/users/{userId}/my")
+    public Page<LeagueModel> getPageWithUserByUserId(@PathVariable Long userId) {
+        return leagueInfraService.getPageWithUserByUserId(userId);
+    }
+
     @PostMapping
     public LeagueModel create(@Valid @RequestBody LeagueModel leagueModel) {
         return leagueInfraService.create(leagueModel);
