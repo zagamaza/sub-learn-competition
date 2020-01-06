@@ -57,7 +57,7 @@ public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueE
     }
 
     @Override
-    public LeagueModel create(LeagueModel model) {
+    public LeagueModel createWithFriend(LeagueModel model) {
         LeagueVersionEntity lastVersion = leagueVersionRepository.findLastVersion();
         model.setLeagueVersionId(lastVersion.getId());
         userFriendInfraService.create(new UserFriendModel(model.getUserId(), model.getUserId(), null));
@@ -69,7 +69,7 @@ public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueE
         Long userId = userModel.getId();
         if (!repository.checkExists(userId)) {
             LeagueLevelModel levelModel = leagueLevelInfraService.getByCode(Level.FIRST);
-            return create(LeagueModel.builder().userId(userId).levelId(levelModel.getId()).build());
+            return createWithFriend(LeagueModel.builder().userId(userId).levelId(levelModel.getId()).build());
         } else {
             LeagueEntity leagueEntity = repository.findLastByUserId(userId);
             LeagueModel leagueModel = getModelMapper().entityToModel(leagueEntity);
@@ -81,14 +81,15 @@ public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueE
     /**
      * Метод @Scheduled, каждый неделю в 00:00 создает для каждого пользователя строку у лиги(длится неделю)
      */
-    @Scheduled(cron = "0 0 0 ? * MON")
+    @Scheduled(cron = "0 0 0 * * MON", zone = "Europe/Moscow")
     @Override
     public void startNewLevel() {
-        leagueVersionRepository.newVersion();
+        LeagueVersionEntity leagueVersionEntity = leagueVersionRepository.newVersion();
         userInfraService.findAll().forEach(u -> create(
                 LeagueModel.builder()
                            .userId(u.getId())
                            .levelId(u.getLevelId())
+                           .leagueVersionId(leagueVersionEntity.getId())
                            .build())
         );
     }

@@ -12,6 +12,8 @@ public interface LeagueInfraService extends BaseResourceInfraService<LeagueModel
 
     LeagueModel createOrUpdateExperience(UserModel userModel);
 
+    LeagueModel createWithFriend(LeagueModel leagueModel);
+
     void startNewLevel();
 
     Page<LeagueModel> getByLeagueLevelCode(Level level, Pageable pageable);

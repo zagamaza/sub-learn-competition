@@ -42,7 +42,7 @@ public class LeagueController {
 
     @PostMapping
     public LeagueModel create(@Valid @RequestBody LeagueModel leagueModel) {
-        return leagueInfraService.create(leagueModel);
+        return leagueInfraService.createWithFriend(leagueModel);
     }
 
     @PutMapping
