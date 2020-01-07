@@ -1,0 +1,33 @@
+version: '3.4'
+services:
+  ms-sublearn-competition:
+    image: almazic91/sub-learn-competition:${COMPETITION_IMAGE_VERSION}
+    depends_on:
+      - sublearn-competition-db
+      - rabbitmq
+    ports:
+      - 8084:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://sublearn-db:5432/sublearndb
+      SPRING_PROFILES_ACTIVE: default
+      SERVER_PORT: 8080
+
+  sublearn-competition-db:
+    image: postgres:11-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: passw0rd
+      POSTGRES_DB: competitiondb
+    ports:
+      - 15430:5432
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres-data:/var/lib/postgresql/data
+
+  rabbit:
+    image: rabbitmq
+    restart: always
+    ports:
+    - 5672:5672
+    - 15672:15672

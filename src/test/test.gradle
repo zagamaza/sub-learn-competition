@@ -1,0 +1,33 @@
+apply from: 'src/test/unitTest/unitTest.gradle'
+
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = '0.8.3'
+}
+
+jacocoTestReport {
+    sourceSets sourceSets.test
+    executionData test
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+task jacocoMergeTest(type: JacocoMerge) {
+    destinationFile = file("${buildDir}/jacoco/allTest.exec")
+    executionData = project.fileTree(dir: '.', include:'**/build/jacoco/*.exec')
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = false
+            limit {
+                minimum = 0.75
+            }
+        }
+    }
+}
+
