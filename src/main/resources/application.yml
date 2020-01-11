@@ -25,6 +25,12 @@ spring:
           initial-interval: 45000
           max-attempts: 10
 
+sublearn:
+  back:
+    url: http://ms-sublearn-back:8080/api
+    login:
+    password:
+
 rabbitmq:
     queue: trial-word-result
 project:

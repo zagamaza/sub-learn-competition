@@ -6,9 +6,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import ru.zagamaza.competition.client.NotificationClient;
 import ru.zagamaza.competition.domain.model.LeagueLevelModel;
 import ru.zagamaza.competition.domain.model.LeagueModel;
 import ru.zagamaza.competition.domain.model.Level;
+import ru.zagamaza.competition.domain.model.NotificationModel;
+import ru.zagamaza.competition.domain.model.NotificationType;
 import ru.zagamaza.competition.domain.model.UserFriendModel;
 import ru.zagamaza.competition.domain.model.UserModel;
 import ru.zagamaza.competition.domain.service.BaseService;
@@ -23,6 +26,7 @@ import ru.zagamaza.competition.infra.service.LeagueInfraService;
 import ru.zagamaza.competition.infra.service.LeagueLevelInfraService;
 import ru.zagamaza.competition.infra.service.UserFriendInfraService;
 import ru.zagamaza.competition.infra.service.UserInfraService;
+import ru.zagamaza.competition.utils.EmojiUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -33,11 +37,14 @@ import java.util.stream.Collectors;
 public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueEntity, LeagueModel>
         implements LeagueInfraService {
 
+    public static final String WINN_MESSAGE = "🎉 Поздравляем! 🎊 \nНа этой недели вы заняли %s место в общем рейгнге!\n✨✨✨";
+
     private final UserInfraService userInfraService;
     private final LeagueLevelInfraService leagueLevelInfraService;
     private final LeagueRepository repository;
     private final LeagueVersionRepository leagueVersionRepository;
     private final UserFriendInfraService userFriendInfraService;
+    private final NotificationClient notificationClient;
 
     public LeagueInfraServiceImpl(
             BaseMapper<LeagueEntity, LeagueModel> baseMapper,
@@ -46,6 +53,7 @@ public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueE
             UserInfraService userInfraService,
             LeagueLevelInfraService leagueLevelInfraService,
             LeagueVersionRepository leagueVersionRepository,
+            NotificationClient notificationClient,
             UserFriendInfraService userFriendInfraService
     ) {
         super(repository, baseService, baseMapper);
@@ -54,6 +62,7 @@ public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueE
         this.leagueLevelInfraService = leagueLevelInfraService;
         this.leagueVersionRepository = leagueVersionRepository;
         this.userFriendInfraService = userFriendInfraService;
+        this.notificationClient = notificationClient;
     }
 
     @Override
@@ -84,6 +93,7 @@ public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueE
     @Scheduled(cron = "0 0 0 * * MON", zone = "Europe/Moscow")
     @Override
     public void startNewLevel() {
+        sendMessagesForWinners();
         LeagueVersionEntity leagueVersionEntity = leagueVersionRepository.newVersion();
         userInfraService.findAll().forEach(u -> create(
                 LeagueModel.builder()
@@ -92,6 +102,16 @@ public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueE
                            .leagueVersionId(leagueVersionEntity.getId())
                            .build())
         );
+    }
+
+    private void sendMessagesForWinners() {
+        List<LeagueModel> leagueModels = getByLeagueLevelCode(Level.FIRST, PageRequest.of(0, 3)).getContent();
+        leagueModels.forEach(l -> notificationClient.create(new NotificationModel(
+                String.format(WINN_MESSAGE, EmojiUtils.extractEmojiPercent(leagueModels.indexOf(l) + 1)),
+                new UserModel(l.getUserId()),
+                NotificationType.MESSAGE
+        )));
+
     }
 
     @Override
@@ -113,7 +133,7 @@ public class LeagueInfraServiceImpl extends BaseResourceInfraServiceImpl<LeagueE
         UserModel userModel = userInfraService.get(userId);
         LeagueLevelModel leagueLevelModel = leagueLevelInfraService.get(userModel.getLevelId());
         Integer numberInLeague = repository.getNumberInLeague(userId, leagueLevelModel.getCode());
-        return getByLeagueLevelCode(leagueLevelModel.getCode(), PageRequest.of(numberInLeague/10,10));
+        return getByLeagueLevelCode(leagueLevelModel.getCode(), PageRequest.of(numberInLeague / 10, 10));
     }
 
 }
